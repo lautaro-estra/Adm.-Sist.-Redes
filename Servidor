@@ -1,0 +1,38 @@
+import socket
+import threading
+
+
+def handle_client(client_socket, client_address):
+    print(f"Conexión establecida con {client_address}")
+    
+    
+    while True:
+        data = client_socket.recv(1024)
+        if not data:
+            break
+        print(f"Mensaje recibido de {client_address}: {data.decode()}")
+       
+        response = "Mensaje recibido"
+        client_socket.send(response.encode())
+    
+        print(f"Conexión cerrada con {client_address}")
+    client_socket.close()
+
+
+host = '127.0.0.1'  # Dirección IP del servidor
+port = 5000  # Puerto del servidor
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+
+server_socket.bind((host, port))
+
+server_socket.listen(5)
+print(f"Servidor escuchando en {host}:{port}")
+
+while True:
+    # Aceptar una nueva conexión
+    client_socket, client_address = server_socket.accept()
+    
+    client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+    client_thread.start()
