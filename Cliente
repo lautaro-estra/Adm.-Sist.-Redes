@@ -1,0 +1,22 @@
+import socket
+
+
+host = '127.0.0.1' 
+port = 5000  
+
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+
+client_socket.connect((host, port))
+print(f"Conexión establecida con el servidor en {host}:{port}")
+
+
+message = " holaaaa servidor "
+client_socket.send(message.encode())
+
+
+response = client_socket.recv(1024)
+print(f"Respuesta del servidor: {response.decode()}")
+
+client_socket.close()
